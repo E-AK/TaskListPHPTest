@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Task List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div style="width: 300px;">
+        <h2>Task List</h2>
+        <!-- Форма для добавления задания -->
+        <div class="task-controls">
+            <form id="addTaskForm" method="POST" action="">
+                <input type="text" name="task" id="taskInput" placeholder="Enter text..." required>
+                <button type="submit" name="addTask" class="add-task">ADD TASK</button>
+            </form>
+            <form id="taskControlsForm" method="POST" action="">
+                <button type="submit" name="removeAll" id="removeAllBtn">Remove All</button>
+                <button type="submit" name="readyAll" id="readyAllBtn">Ready All</button>
+            </form>
+        </div>
+    
+        <!-- Список задач -->
+        <div id="taskList"></div>
+        </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

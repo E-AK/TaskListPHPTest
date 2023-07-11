@@ -1,0 +1,62 @@
+.task {
+  display: flex;
+  margin-bottom: 10px;
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+  align-items: center;
+}
+
+.task .status {
+  display: inline-block;
+  width: 80px;
+}
+
+.task .actions {
+  display: inline-block;
+}
+
+input[type="text"] {
+  border: 2px solid black;
+}
+
+button {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+button.add-task {
+  background-color: black;
+  color: white;
+}
+
+.status {
+  display: inline-block;
+  align-items: center;
+  white-space: normal;
+}
+
+.circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.circle.ready {
+  border: 2px solid green;
+}
+
+.circle.not-ready {
+  border: 2px solid red;
+}
+
+.task-controls {
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+}
