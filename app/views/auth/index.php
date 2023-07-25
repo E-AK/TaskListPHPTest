@@ -1,5 +1,3 @@
-<?php include("./templates/header.php"); ?>
-
 <div class="container mlogin">
     <div id="login">
         <h1>Log In</h1>
@@ -16,5 +14,3 @@
         </form>
     </div>
 </div>
-
-<?php include("./templates/footer.php"); ?>

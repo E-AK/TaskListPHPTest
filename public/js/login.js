@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // Обработчик отправки формы для входа в систему
-    $("#loginform").submit(function (event) {
+    $("#loginform").click(function (event) {
         event.preventDefault();
 
         // Получение значений полей ввода

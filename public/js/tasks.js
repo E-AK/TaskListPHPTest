@@ -126,13 +126,14 @@ $(document).ready(function () {
     function loadTasks() {
         getAllTasks()
             .then(function (tasksResponse) {
-                let tasks = JSON.parse(tasksResponse);
+                let tasks = JSON.parse(tasksResponse).message;
+                let status = JSON.parse(tasksResponse).status;
 
-                if (tasks.tasks.length > 0) {
+                if (status == "success" && tasks.length > 0) {
                     var taskListHtml = "";
                     var allTasksReady = true;
-                    for (var i = 0; i < tasks.tasks.length; i++) {
-                        var task = tasks.tasks[i];
+                    for (var i = 0; i < tasks.length; i++) {
+                        var task = tasks[i];
 
                         var taskStatusClass =
                             task.status === "Ready" ? "ready" : "not-ready";
