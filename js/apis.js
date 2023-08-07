@@ -109,26 +109,6 @@ function createUser(login, password) {
     return sendAjaxRequest("controllers/users.php", "POST", data);
 }
 
-// Обновление пользователя
-function updateUser(userId, login, password) {
-    var data = {
-        operation: "update",
-        user_id: userId,
-        login: login,
-        password: password,
-    };
-    return sendAjaxRequest("controllers/users.php", "POST", data);
-}
-
-// Удаление пользователя
-function deleteUser(userId) {
-    var data = {
-        operation: "delete",
-        user_id: userId,
-    };
-    return sendAjaxRequest("controllers/users.php", "POST", data);
-}
-
 // Получение пользователя
 function getUser(login) {
     var data = {
@@ -145,5 +125,5 @@ function auth(login, password) {
         login: login,
         password: password,
     };
-    return sendAjaxRequest("controllers/autn.php", "POST", data);
+    return sendAjaxRequest("controllers/auth.php", "POST", data);
 }

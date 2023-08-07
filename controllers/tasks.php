@@ -1,11 +1,11 @@
 <?php
-require('../models/task.php');
+require('../models/Task.php');
 require('../services/tasks.php');
 
 session_start();
 
 // Получаем userId из сессии
-$userId = base64_decode($_SESSION['user_id']) ?? null;
+$userId = $_SESSION['user_id'] ?? null;
 
 // Проверяем метод запроса
 switch ($_SERVER['REQUEST_METHOD']) {
@@ -14,7 +14,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         switch ($_POST['operation']) {
             case 'create':
                 // Создание новой задачи
-                $description = htmlspecialchars($_POST['description']);
+                $description = $_POST['description'];
 
                 try {
                     $createdTask = createTask($userId, $description, 'Unready');
@@ -26,10 +26,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'ready':
-                // Пометить задачу как готовую
-                $taskId = htmlspecialchars($_POST['task_id']);
-
                 try {
+                    // Пометить задачу как готовую
+                    $taskId = (int)$_POST['task_id'];
                     readyTask($taskId);
                     echo json_encode(['status' => 'success']);
                 } catch (Exception $e) {
@@ -38,10 +37,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'unready':
-                // Пометить задачу как неготовую
-                $taskId = htmlspecialchars($_POST['task_id']);
-
                 try {
+                    // Пометить задачу как неготовую
+                    $taskId = (int)$_POST['task_id'];
                     unreadyTask($taskId);
                     echo json_encode(['status' => 'success']);
                 } catch (Exception $e) {
@@ -50,14 +48,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'update':
-                // Обновление задачи
-                $taskId = htmlspecialchars($_POST['task_id']);
-                $description = htmlspecialchars($_POST['description']);
-                $createdAt = htmlspecialchars($_POST['created_at']);
-                $statusId = htmlspecialchars($_POST['status_id']);
-
-                $task = new Task($taskId, null, $description, $createdAt, $statusId);
                 try {
+                    // Обновление задачи
+                    $taskId = (int)$_POST['task_id'];
+                    $description = $_POST['description'];
+                    $createdAt = $_POST['created_at'];
+                    $statusId = (int)$_POST['status_id'];
+
+                    $task = new Task($taskId, null, $description, $createdAt, $statusId);
                     updateTask($task);
                     echo json_encode(['status' => 'success']);
                 } catch (Exception $e) {
@@ -96,10 +94,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'delete':
-                // Удаление задачи
-                $taskId = htmlspecialchars($_POST['task_id']);
-
                 try {
+                    // Удаление задачи
+                    $taskId = (int)$_POST['task_id'];
                     deleteTask($taskId);
                     echo json_encode(['status' => 'success']);
                 } catch (Exception $e) {

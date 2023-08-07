@@ -49,7 +49,7 @@ function getAllTasks(int $userId): array {
             $task = new Task(
                 $row['id'],
                 $row['user_id'],
-                $row['description'],
+                htmlspecialchars($row['description']),
                 $row['created_at'],
                 $row['status']
             );

@@ -1,5 +1,5 @@
 <?php
-require('../models/user.php');
+require('../models/User.php');
 require('../services/users.php');
 
 session_start();
@@ -10,8 +10,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // Проверяем тип операции
         switch ($_POST['operation']) {
             case 'auth':
-                $login = htmlspecialchars($_POST['login']);
-                $password = htmlspecialchars($_POST['password']);
+                $login = $_POST['login'];
+                $password = $_POST['password'];
 
                 $user = new User(null, $login, $password, null);
 
@@ -25,21 +25,17 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                     if ($authentication) {
                         // Записываем userId в сессию в зашифрованном виде base64
-                        $_SESSION['user_id'] = base64_encode($authentication);
-                    } elseif ($authentication === null) {
-                        try {
-                            $createdUserId = createUser($user);
+                        $_SESSION['user_id'] = $authentication;
+                        break;
+                    } 
+                    
+                    // Пытаемся создать нового пользователя
+                    $createdUserId = createUser($user);
 
-                            // Записываем userId в сессию в зашифрованном виде base64
-                            $_SESSION['user_id'] = base64_encode($createdUserId);
+                    // Записываем userId в сессию в зашифрованном виде base64
+                    $_SESSION['user_id'] = $createdUserId;
 
-                            echo json_encode(['status' => 'success', 'user_id' => $createdUserId]);
-                        } catch (Exception $e) {
-                            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
-                        }
-                    } else {
-                        echo json_encode(['status' => 'success', 'message' => 'Invalid username or password']);
-                    }
+                    echo json_encode(['status' => 'success', 'user_id' => $createdUserId]);
                 } catch (Exception $e) {
                     echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
                     break;

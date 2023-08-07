@@ -50,7 +50,7 @@ function getUserByLogin(string $login)
         // Получение результата и создание объекта User
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
-            $user = new User($result['id'], $result['login'], null, $result['created_at']);
+            $user = new User($result['id'], htmlspecialchars($result['login']), null, $result['created_at']);
 
             return $user;
         } else {
@@ -82,7 +82,7 @@ function authentication(string $login, string $password)
         // Получение результата и проверка пароля
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
-            if ($login === $result['login'] && password_verify($password, $result['password'])) {
+            if (password_verify($password, $result['password'])) {
                 return $result['id'];
             } else {
                 return false;
@@ -92,54 +92,6 @@ function authentication(string $login, string $password)
         }
     } catch (PDOException $e) {
         throw new Exception("Ошибка при получении пользователя: " . $e->getMessage());
-    }
-}
-
-/**
- * Обновление информации о пользователе
- *
- * @param User $user Объект пользователя
- * @return User В случае успешного обновления
- * @throws Exception В случае ошибки при выполнении запроса
- */
-function updateUser(User $user): User
-{
-    $conn = connectDB();
-
-    try {
-        $query = "UPDATE persons SET login = :login, password = :password WHERE id = :id";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':login', $user->getLogin(), PDO::PARAM_STR);
-        $stmt->bindParam(':password', $user->getPassword(), PDO::PARAM_STR);
-        $stmt->bindParam(':id', $user->getId(), PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $user;
-    } catch (PDOException $e) {
-        throw new Exception("Ошибка при обновлении пользователя: " . $e->getMessage());
-    }
-}
-
-/**
- * Удаление пользователя
- *
- * @param int $userId Идентификатор пользователя
- * @return bool True в случае успешного удаления
- * @throws Exception В случае ошибки при выполнении запроса
- */
-function deleteUser(int $userId): bool
-{
-    $conn = connectDB();
-
-    try {
-        $query = "DELETE FROM persons WHERE id = :id";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        return true;
-    } catch (PDOException $e) {
-        throw new Exception("Ошибка при удалении пользователя: " . $e->getMessage());
     }
 }
 ?>
