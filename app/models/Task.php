@@ -66,8 +66,9 @@ class Task extends Model {
      * @param int $taskId Идентификатор задачи
      * @return bool Успешность выполнения операции
      */
-    public function readyTask(int $taskId) {
-        $result = $this->db->row("UPDATE tasks SET status_id = (SELECT id FROM task_statuses WHERE status = 'Ready') WHERE id = " . $taskId);
+    public function readyTask(int $taskId, int $userId) {
+        $result = $this->db->row("UPDATE tasks SET status_id = (SELECT id FROM task_statuses WHERE status = 'Ready') 
+            WHERE id = " . $taskId . " AND user_id = " . $userId);
 
         if ($result !== null) {
             return true;
@@ -82,8 +83,9 @@ class Task extends Model {
      * @param int $taskId Идентификатор задачи
      * @return bool Успешность выполнения операции
      */
-    public function unreadyTask(int $taskId) {
-        $result = $this->db->row("UPDATE tasks SET status_id = (SELECT id FROM task_statuses WHERE status = 'Unready') WHERE id = " . $taskId);
+    public function unreadyTask(int $taskId, $userId) {
+        $result = $this->db->row("UPDATE tasks SET status_id = (SELECT id FROM task_statuses WHERE status = 'Unready') 
+            WHERE id = " . $taskId . " AND user_id = " . $userId);
 
         if ($result !== null) {
             return true;
@@ -98,8 +100,8 @@ class Task extends Model {
      * @param int $taskId Идентификатор задачи
      * @return bool Успешность выполнения операции
      */
-    public function deleteTask(int $taskId) {
-        $result = $this->db->row("DELETE FROM tasks WHERE id = " . $taskId);
+    public function deleteTask(int $taskId, $userId) {
+        $result = $this->db->row("DELETE FROM tasks WHERE id = " . $taskId . " AND user_id = " . $userId);
 
         if ($result !== null) {
             return true;

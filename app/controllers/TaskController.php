@@ -20,7 +20,7 @@ class TaskController extends Controller {
         $result = $this->model->getAllTasks($userId);
 
         if ($result) {
-            $this->view->message('success', $result);
+            $this->view->message('success', htmlspecialchars($result));
         } else {
             $this->view->message('error', 'Ошибка при получении задач');
         }
@@ -32,7 +32,7 @@ class TaskController extends Controller {
     public function createTaskAction() {
         $userId = $_SESSION['user_id'];
 
-        $description = htmlspecialchars($_POST['description']);
+        $description = $_POST['description'];
 
         $result = $this->model->createTask($userId, $description);
 
@@ -46,14 +46,13 @@ class TaskController extends Controller {
      * Установить статус "Ready" для задачи
      */
     public function readyTaskAction() {
-        $taskId = htmlspecialchars($_POST['task_id']);
-
-        $result = $this->model->readyTask($taskId);
-
-        if ($result) {
+        try{
+            $taskId = (int)$_POST['task_id'];
+            $userId = $_SESSION['user_id'];
+            $result = $this->model->readyTask($taskId, $userId);
             $this->view->message('success', 'Задача отмечена как выполнена');
-        } else {
-            $this->view->message('error', 'Ошибка при отметке задачи');
+        } catch (PDOException $e) {
+            $this->view->message('error', 'Ошибка при отметке задачи: ' . $e);
         }
     }
 
@@ -61,14 +60,12 @@ class TaskController extends Controller {
      * Установить статус "Unready" для задачи
      */
     public function unreadyTaskAction() {
-        $taskId = htmlspecialchars($_POST['task_id']);
-
-        $result = $this->model->unreadyTask($taskId);
-
-        if ($result) {
-            $this->view->message('success', 'Задача отмечена как не выполнена');
-        } else {
-            $this->view->message('error', 'Ошибка при отметке задачи');
+        try {
+            $taskId = (int)$_POST['task_id'];
+            $userId = $_SESSION['user_id'];
+            $result = $this->model->unreadyTask($taskId, $userId);
+        } catch (PDOException $e) {
+            $this->view->message('error', 'Ошибка при отметке задачи: ' . $e);
         }
     }
 
@@ -121,14 +118,14 @@ class TaskController extends Controller {
      * Удалить задачу
      */
     public function deleteTaskAction() {
-        $taskId = htmlspecialchars($_POST['task_id']);
+        try {
+            $taskId = (int)$_POST['task_id'];
+            $userId = $_SESSION['user_id'];
+            $result = $this->model->deleteTask($taskId, $userId);
 
-        $result = $this->model->deleteTask($taskId);
-
-        if ($result) {
             $this->view->message('success', 'Задача удалена');
-        } else {
-            $this->view->message('error', 'Ошибка при удалении задачи');
+        } catch (PDOException $e) {
+            $this->view->message('error', 'Ошибка при удалении задачи: ' . $e);
         }
     }
 }

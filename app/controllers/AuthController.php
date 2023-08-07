@@ -22,8 +22,8 @@ class AuthController extends Controller {
         }
 
         // Получаем логин и пароль
-        $login = htmlspecialchars($_POST['login']);
-        $password = htmlspecialchars($_POST['password']);
+        $login = $_POST['login'];
+        $password = $_POST['password'];
 
         // Выполняем аутентификацию
         $result = $this->model->authentication($login, $password);
@@ -34,20 +34,18 @@ class AuthController extends Controller {
             $_SESSION['user_id'] = $result->id;
 
             $this->view->message('success', "Авторизация успешна");
-        } elseif ($result === null) {
-            // Создаем нового пользователя
+            return;
+        } 
+        
+        try {
+            // Пытаемся создать нового пользователя
             $createdUser = $this->model->createUser($login, $password);
 
-            if ($createdUser) {
-                // Записываем userId в сессию в зашифрованном виде base64
-                $_SESSION['user_id'] = $createdUser->id;
+            $_SESSION['user_id'] = $createdUser->id;
 
-                $this->view->message('success', "Регистрация успешна");
-            } else {
-                $this->view->message('error', "Ошибка при регистрации пользователя");
-            }
-        } else {
-            $this->view->message('error', "Неверные логин или пароль");
+            $this->view->message('success', "Регистрация успешна");
+        } catch (PDOException $e) {
+            $this->view->message('error', "Ошибка при регистрации пользователя");
         }
     }
 }
