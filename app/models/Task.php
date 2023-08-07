@@ -47,7 +47,7 @@ class Task extends Model {
                     $task = new Task;
                     $task->id = $row['id'];
                     $task->userId = $row['user_id'];
-                    $task->description = $row['description'];
+                    $task->description = htmlspecialchars($row['description']);
                     $task->createdAt = $row['created_at']; // Corrected the property name
                     $task->status = $row['status'];
 

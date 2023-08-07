@@ -20,7 +20,7 @@ class TaskController extends Controller {
         $result = $this->model->getAllTasks($userId);
 
         if ($result) {
-            $this->view->message('success', htmlspecialchars($result));
+            $this->view->message('success', $result);
         } else {
             $this->view->message('error', 'Ошибка при получении задач');
         }
