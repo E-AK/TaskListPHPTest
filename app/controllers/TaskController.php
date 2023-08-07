@@ -19,8 +19,14 @@ class TaskController extends Controller {
 
         $result = $this->model->getAllTasks($userId);
 
+        $data = array();
+
+        foreach($result as $key => $value) {
+            $data[key] = htmlspecialchars($value);
+        }
+
         if ($result) {
-            $this->view->message('success', htmlspecialchars($result));
+            $this->view->message('success', $data);
         } else {
             $this->view->message('error', 'Ошибка при получении задач');
         }
